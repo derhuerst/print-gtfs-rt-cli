@@ -26,7 +26,9 @@
 		"node": ">=8"
 	},
 	"dependencies": {
-		"mri": "^1.1.1"
+		"gtfs-rt-bindings": "^1.0.0",
+		"mri": "^1.1.1",
+		"pbf": "^3.1.0"
 	},
 	"scripts": {
 		"test": "echo todo; exit 1",
