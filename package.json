@@ -31,7 +31,7 @@
 		"pbf": "^3.1.0"
 	},
 	"scripts": {
-		"test": "echo todo; exit 1",
+		"test": "cat example-feed.pbf | ./cli.js --json >/dev/null",
 		"prepublishOnly": "npm test"
 	}
 }

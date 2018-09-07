@@ -33,3 +33,8 @@ Examples:
 ## Contributing
 
 If you have a question or have difficulties using `print-gtfs-rt-cli`, please double-check your code and setup first. If you think you have found a bug or want to propose a feature, refer to [the issues page](https://github.com/derhuerst/print-gtfs-rt-cli/issues).
+
+
+## Example feed
+
+The example feed is taken from [the Swiss open GTFS-RT feed](https://opentransportdata.swiss/en/dataset/gtfsrt), licensed under [their open data license](https://opentransportdata.swiss/en/terms-of-use/).
