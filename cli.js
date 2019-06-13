@@ -39,7 +39,6 @@ const showError = (err) => {
 
 if (isatty(process.stdin.fd)) showError('You must pipe into print-gtfs-rt.')
 
-const Pbf = require('pbf')
 const {FeedMessage} = require('gtfs-rt-bindings')
 const {inspect} = require('util')
 
@@ -56,10 +55,10 @@ const read = (readable) => {
 const printAsJSON = argv.json || argv.j
 const printWithColors = isatty(process.stdout.fd)
 
-// todo: convert PBF in a streaming way
+// todo: convert in a streaming way
 read(process.stdin)
 .then((buf) => {
-	const data = FeedMessage.read(new Pbf(buf))
+	const data = FeedMessage.decode(buf)
 	if (!data || !data.header || !Array.isArray(data.entity)) {
 		throw new Error('invalid feed')
 	}
