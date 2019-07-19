@@ -24,7 +24,9 @@ Or use [`npx`](https://npmjs.com/package/npx). ✨
 Usage:
     cat gtfs-rt-feed.pbf | print-gtfs-rt
 Options:
-	--json  -j  Output JSON instead of a pretty represenation.
+	--length-prefixed  -l  Read input as length-prefixed.
+	                       See https://www.npmjs.com/package/length-prefixed-stream
+	--json  -j             Output JSON instead of a pretty represenation.
 Examples:
     curl 'https://example.org/gtfs-rt.pbf' | print-gtfs-rt
 ```
