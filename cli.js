@@ -11,7 +11,8 @@ const argv = mri(process.argv.slice(2), {
 		'help', 'h',
 		'version', 'v',
 		'length-prefixed', 'l',
-		'json', 'j'
+		'json', 'j',
+		'single-json', 's',
 	]
 })
 
@@ -22,7 +23,9 @@ Usage:
 Options:
 	--length-prefixed  -l  Read input as length-prefixed.
 	                       See https://www.npmjs.com/package/length-prefixed-stream
-	--json  -j             Output JSON instead of a pretty represenation.
+	--json  -j             Output newline-delimeted JSON instead of a pretty represenation.
+												 See http://ndjson.org/
+	--single-json -s			 Outputs standard JSON.
 Examples:
     curl 'https://example.org/gtfs-rt.pbf' | print-gtfs-rt
 \n`)
@@ -57,7 +60,8 @@ const read = (readable) => {
 }
 
 const isLengthPrefixed = argv['length-prefixed'] || argv.l
-const printAsJSON = argv.json || argv.j
+const printAsNDJSON = argv.json || argv.j
+const printAsJSON = argv['single-json'] || argv.s
 const printWithColors = isatty(process.stdout.fd)
 
 const onFeedMessage = (buf) => {
@@ -66,11 +70,20 @@ const onFeedMessage = (buf) => {
 		throw new Error('invalid feed')
 	}
 
-	for (const entity of data.entity) {
-		const msg = printAsJSON
+	if (printAsJSON) {
+		process.stdout.write('[\n')
+	}
+	for (var i = 0; i < data.entity.length; ++i) {
+		const entity = data.entity[i];
+		const msg = printAsNDJSON || printAsJSON
 			? JSON.stringify(entity)
 			: inspect(entity, {depth: null, colors: printWithColors})
-		process.stdout.write(msg + '\n')
+		const isLastEntity = i == data.entity.length - 1;
+		const delimeter = (printAsJSON && !isLastEntity) ? ',\n' : '\n'
+		process.stdout.write(msg + delimeter)
+	}
+	if (printAsJSON) {
+		process.stdout.write(']\n')
 	}
 }
 
