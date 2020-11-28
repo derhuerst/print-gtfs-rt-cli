@@ -26,7 +26,9 @@ Usage:
 Options:
 	--length-prefixed  -l  Read input as length-prefixed.
 	                       See https://www.npmjs.com/package/length-prefixed-stream
-	--json  -j             Output JSON instead of a pretty represenation.
+	--json  -j             Output newline-delimeted JSON (http://ndjson.org).
+	--single-json -s       Output a single JSON array.
+	--depth            -d  Number of nested levels to print. Default: infinite
 Examples:
     curl 'https://example.org/gtfs-rt.pbf' | print-gtfs-rt
 ```
