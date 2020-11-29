@@ -23,6 +23,7 @@ Options:
 	--length-prefixed  -l  Read input as length-prefixed.
 	                       See https://www.npmjs.com/package/length-prefixed-stream
 	--json  -j             Output JSON instead of a pretty represenation.
+	--depth            -d  Number of nested levels to print. Default: infinite
 Examples:
     curl 'https://example.org/gtfs-rt.pbf' | print-gtfs-rt
 \n`)
@@ -59,6 +60,7 @@ const read = (readable) => {
 const isLengthPrefixed = argv['length-prefixed'] || argv.l
 const printAsJSON = argv.json || argv.j
 const printWithColors = isatty(process.stdout.fd)
+const depth = argv.depth || argv.d ? parseInt(argv.depth || argv.d) : null
 
 const onFeedMessage = (buf) => {
 	const data = FeedMessage.decode(buf)
@@ -69,7 +71,7 @@ const onFeedMessage = (buf) => {
 	for (const entity of data.entity) {
 		const msg = printAsJSON
 			? JSON.stringify(entity)
-			: inspect(entity, {depth: null, colors: printWithColors})
+			: inspect(entity, {depth, colors: printWithColors})
 		process.stdout.write(msg + '\n')
 	}
 }
