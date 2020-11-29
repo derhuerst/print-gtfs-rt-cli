@@ -36,6 +36,7 @@ if (argv.version || argv.v) {
 }
 
 const showError = (err) => {
+	if (err && err.code === 'EPIPE') return; // todo: refine this
 	if (process.env.NODE_ENV === 'dev') console.error(err)
 	else console.error(err.message || (err + ''))
 	process.exit(1)
@@ -44,6 +45,7 @@ const showError = (err) => {
 if (isatty(process.stdin.fd)) showError('You must pipe into print-gtfs-rt.')
 
 const {decode: decodeLengthPrefixed} = require('length-prefixed-stream')
+const {pipeline} = require('stream')
 const {FeedMessage} = require('gtfs-rt-bindings')
 const {inspect} = require('util')
 
@@ -77,13 +79,16 @@ const onFeedMessage = (buf) => {
 }
 
 if (isLengthPrefixed) {
-	process.stdin
-	.once('error', showError)
-	.pipe(decodeLengthPrefixed())
-	.once('error', showError)
-	.on('data', onFeedMessage)
+	const decoder = decodeLengthPrefixed()
+	pipeline(
+		process.stdin,
+		decoder,
+		showError,
+	)
+	decoder.on('data', onFeedMessage)
 } else {
 	read(process.stdin)
 	.then(chunks => onFeedMessage(Buffer.concat(chunks)))
 	.catch(showError)
 }
+process.stdout.on('error', showError)
