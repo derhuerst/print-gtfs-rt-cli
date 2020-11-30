@@ -23,9 +23,10 @@ Usage:
 Options:
 	--length-prefixed  -l  Read input as length-prefixed.
 	                       See https://www.npmjs.com/package/length-prefixed-stream
-	--json  -j             Output newline-delimeted JSON instead of a pretty represenation.
-												 See http://ndjson.org/
-	--single-json -s			 Outputs standard JSON.
+	--json  -j             Output JSON instead of a pretty represenation.
+	                       See http://ndjson.org/
+	--depth            -d  Number of nested levels to print. Default: infinite
+	--single-json -s       Outputs standard JSON.
 Examples:
     curl 'https://example.org/gtfs-rt.pbf' | print-gtfs-rt
 \n`)
@@ -38,6 +39,7 @@ if (argv.version || argv.v) {
 }
 
 const showError = (err) => {
+	if (err && err.code === 'EPIPE') return; // todo: refine this
 	if (process.env.NODE_ENV === 'dev') console.error(err)
 	else console.error(err.message || (err + ''))
 	process.exit(1)
@@ -46,6 +48,7 @@ const showError = (err) => {
 if (isatty(process.stdin.fd)) showError('You must pipe into print-gtfs-rt.')
 
 const {decode: decodeLengthPrefixed} = require('length-prefixed-stream')
+const {pipeline} = require('stream')
 const {FeedMessage} = require('gtfs-rt-bindings')
 const {inspect} = require('util')
 
@@ -63,6 +66,7 @@ const isLengthPrefixed = argv['length-prefixed'] || argv.l
 const printAsNDJSON = argv.json || argv.j
 const printAsJSON = argv['single-json'] || argv.s
 const printWithColors = isatty(process.stdout.fd)
+const depth = argv.depth || argv.d ? parseInt(argv.depth || argv.d) : null
 
 const onFeedMessage = (buf) => {
 	const data = FeedMessage.decode(buf)
@@ -77,7 +81,7 @@ const onFeedMessage = (buf) => {
 		const entity = data.entity[i];
 		const msg = printAsNDJSON || printAsJSON
 			? JSON.stringify(entity)
-			: inspect(entity, {depth: null, colors: printWithColors})
+			: inspect(entity, {depth, colors: printWithColors})
 		const isLastEntity = i == data.entity.length - 1;
 		const delimeter = (printAsJSON && !isLastEntity) ? ',\n' : '\n'
 		process.stdout.write(msg + delimeter)
@@ -88,13 +92,16 @@ const onFeedMessage = (buf) => {
 }
 
 if (isLengthPrefixed) {
-	process.stdin
-	.once('error', showError)
-	.pipe(decodeLengthPrefixed())
-	.once('error', showError)
-	.on('data', onFeedMessage)
+	const decoder = decodeLengthPrefixed()
+	pipeline(
+		process.stdin,
+		decoder,
+		showError,
+	)
+	decoder.on('data', onFeedMessage)
 } else {
 	read(process.stdin)
 	.then(chunks => onFeedMessage(Buffer.concat(chunks)))
 	.catch(showError)
 }
+process.stdout.on('error', showError)
