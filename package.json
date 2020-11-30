@@ -1,12 +1,12 @@
 {
 	"name": "print-gtfs-rt-cli",
 	"description": "Read a GTFS Realtime feed from stdin, print human-readable or as JSON.",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"files": [
 		"cli.js"
 	],
 	"bin": {
-		"print-gtfs-rt": "./cli.js"
+		"print-gtfs-rt": "cli.js"
 	},
 	"keywords": [
 		"gtfs",
@@ -31,7 +31,7 @@
 		"mri": "^1.1.1"
 	},
 	"scripts": {
-		"test": "cat example-feed.pbf | ./cli.js --json >/dev/null",
+		"test": "cat example-feed.pbf | ./cli.js --json | wc -l",
 		"prepublishOnly": "npm test"
 	}
 }
