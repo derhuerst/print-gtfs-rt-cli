@@ -38,7 +38,8 @@ if (argv.version || argv.v) {
 }
 
 const showError = (err) => {
-	if (err && err.code === 'EPIPE') return; // todo: refine this
+	if (!err) return;
+	if (err.code === 'EPIPE') return; // todo: refine this
 	if (process.env.NODE_ENV === 'dev') console.error(err)
 	else console.error(err.message || (err + ''))
 	process.exit(1)
