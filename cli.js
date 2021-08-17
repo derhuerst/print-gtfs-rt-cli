@@ -69,7 +69,7 @@ const printWithColors = isatty(process.stdout.fd)
 const depth = argv.depth || argv.d ? parseInt(argv.depth || argv.d) : null
 
 const onFeedMessage = (buf) => {
-	const data = FeedMessage.decode(buf)
+	const data = FeedMessage.toObject(FeedMessage.decode(buf))
 	if (!data || !data.header || !Array.isArray(data.entity)) {
 		throw new Error('invalid feed')
 	}

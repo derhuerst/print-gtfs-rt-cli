@@ -23,10 +23,10 @@
 	"bugs": "https://github.com/derhuerst/print-gtfs-rt-cli/issues",
 	"license": "ISC",
 	"engines": {
-		"node": ">=8"
+		"node": ">=14"
 	},
 	"dependencies": {
-		"gtfs-rt-bindings": "^3.0.0",
+		"gtfs-rt-bindings": "^4.0.0",
 		"length-prefixed-stream": "^2.0.0",
 		"mri": "^1.1.1"
 	},
