@@ -1,7 +1,7 @@
 {
 	"name": "print-gtfs-rt-cli",
 	"description": "Read a GTFS Realtime feed from stdin, print human-readable or as JSON.",
-	"version": "1.2.1",
+	"version": "2.0.0",
 	"files": [
 		"cli.js"
 	],
