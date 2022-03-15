@@ -31,7 +31,7 @@
 		"mri": "^1.1.1"
 	},
 	"scripts": {
-		"test": "cat example-feed.pbf | ./cli.js --json | wc -l",
+		"test": "./test.sh",
 		"prepublishOnly": "npm test"
 	}
 }

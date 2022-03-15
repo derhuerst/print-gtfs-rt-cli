@@ -78,8 +78,14 @@ const bindings = argv['gtfs-rt-bindings']
 const {FeedMessage} = bindings.transit_realtime || bindings
 const onFeedMessage = (buf) => {
 	const data = FeedMessage.toObject(FeedMessage.decode(buf))
-	if (!data || !data.header || !Array.isArray(data.entity)) {
-		throw new Error('invalid feed')
+	if (!data) throw new Error('invalid feed')
+	if (!data.header) throw new Error('invalid feed: missing header')
+
+	// Protocol buffers don't encode empty arrays, so .entity is missing with 0 FeedEntitys.
+	if (!('entity' in data)) {
+		data.entity = []
+	} else if (!Array.isArray(data.entity)) {
+		throw new Error('invalid feed: missing entity[]')
 	}
 
 	if (printAsJSON) {
