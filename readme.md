@@ -3,7 +3,6 @@
 **Read a [GTFS Realtime (GTFS-RT)](https://developers.google.com/transit/gtfs-realtime/) feed from stdin, print human-readable or as JSON.**
 
 [![npm version](https://img.shields.io/npm/v/print-gtfs-rt-cli.svg)](https://www.npmjs.com/package/print-gtfs-rt-cli)
-[![build status](https://api.travis-ci.org/derhuerst/print-gtfs-rt-cli.svg?branch=master)](https://travis-ci.org/derhuerst/print-gtfs-rt-cli)
 ![ISC-licensed](https://img.shields.io/github/license/derhuerst/print-gtfs-rt-cli.svg)
 [![support me via GitHub Sponsors](https://img.shields.io/badge/support%20me-donate-fa7664.svg)](https://github.com/sponsors/derhuerst)
 [![chat with me on Twitter](https://img.shields.io/badge/chat%20with%20me-on%20Twitter-1da1f2.svg)](https://twitter.com/derhuerst)
