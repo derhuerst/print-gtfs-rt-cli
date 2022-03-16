@@ -31,7 +31,11 @@
 		"mri": "^1.1.1"
 	},
 	"scripts": {
+		"lint": "eslint .",
 		"test": "./test.sh",
-		"prepublishOnly": "npm test"
+		"prepublishOnly": "npm run lint && npm test"
+	},
+	"devDependencies": {
+		"eslint": "^8.11.0"
 	}
 }
