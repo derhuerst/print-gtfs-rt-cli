@@ -1,29 +1,53 @@
 #!/usr/bin/env node
 'use strict'
 
-const mri = require('mri')
+const {parseArgs} = require('util')
 const {isatty} = require('tty')
 
 const pkg = require('./package.json')
 
-const argv = mri(process.argv.slice(2), {
-	boolean: [
-		'help', 'h',
-		'version', 'v',
-		'length-prefixed', 'l',
-		'json', 'j',
-		'single-json', 's',
-	]
+const {
+	values: flags,
+} = parseArgs({
+	options: {
+		help: {
+			type: 'boolean',
+			short: 'h',
+		},
+		version: {
+			type: 'boolean',
+			short: 'v',
+		},
+		'length-prefixed': {
+			type: 'boolean',
+			short: 'l',
+		},
+		json: {
+			type: 'boolean',
+			short: 'j',
+		},
+		'single-json': {
+			type: 'boolean',
+			short: 's',
+		},
+		'depth': {
+			type: 'string',
+			short: 'd',
+		},
+		'gtfs-rt-bindings': {
+			type: 'string',
+		},
+	},
 })
 
-if (argv.help || argv.h) {
+if (flags.help) {
 	process.stdout.write(`
 Usage:
     cat gtfs-rt-feed.pbf | print-gtfs-rt
 Options:
     --length-prefixed  -l  Read input as length-prefixed.
                            See https://www.npmjs.com/package/length-prefixed-stream
-    --json  -j             Output newline-delimeted JSON (http://ndjson.org).
+    --json             -j  Output newline-delimeted JSON (http://ndjson.org).
     --single-json -s       Output a single JSON array.
     --depth            -d  Number of nested levels to print. Default: infinite
     --gtfs-rt-bindings     Path to GTFS-RT bindings. Must be compatible with
@@ -34,7 +58,7 @@ Examples:
 	process.exit(0)
 }
 
-if (argv.version || argv.v) {
+if (flags.version) {
 	process.stdout.write(`print-gtfs-rt v${pkg.version}\n`)
 	process.exit(0)
 }
@@ -65,14 +89,14 @@ const read = (readable) => {
 	})
 }
 
-const isLengthPrefixed = argv['length-prefixed'] || argv.l
-const printAsNDJSON = argv.json || argv.j
-const printAsJSON = argv['single-json'] || argv.s
+const isLengthPrefixed = flags['length-prefixed']
+const printAsNDJSON = flags.json
+const printAsJSON = flags['single-json']
 const printWithColors = isatty(process.stdout.fd)
-const depth = argv.depth || argv.d ? parseInt(argv.depth || argv.d) : null
+const depth = flags.depth ? parseInt(flags.depth) : null
 
-const bindings = argv['gtfs-rt-bindings']
-	? require(pathResolve(process.cwd(), argv['gtfs-rt-bindings']))
+const bindings = flags['gtfs-rt-bindings']
+	? require(pathResolve(process.cwd(), flags['gtfs-rt-bindings']))
 	: defaultBindings
 
 const {FeedMessage} = bindings.transit_realtime || bindings
