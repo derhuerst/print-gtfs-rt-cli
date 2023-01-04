@@ -97,6 +97,7 @@ const onFeedMessage = (buf) => {
 	if (includeAll) {
 		const msg = printAsJSON ? JSON.stringify(data) : inspect(data, inspectOptions);
 		process.stdout.write(msg);
+		return;
 	} else {
 		if (printAsJSON) {
 			process.stdout.write('[\n')
