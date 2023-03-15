@@ -1,7 +1,7 @@
 {
 	"name": "print-gtfs-rt-cli",
 	"description": "Read a GTFS Realtime feed from stdin, print human-readable or as JSON.",
-	"version": "3.0.0",
+	"version": "3.1.0",
 	"files": [
 		"cli.js"
 	],
@@ -18,6 +18,9 @@
 		"cli"
 	],
 	"author": "Jannis R <mail@jannisr.de>",
+	"contributors": [
+		"John Helmuth <john.helmuth@soundtransit.org>"
+	],
 	"homepage": "https://github.com/derhuerst/print-gtfs-rt-cli",
 	"repository": "derhuerst/print-gtfs-rt-cli",
 	"bugs": "https://github.com/derhuerst/print-gtfs-rt-cli/issues",
