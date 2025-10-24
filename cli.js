@@ -82,6 +82,7 @@ const {decode: decodeLengthPrefixed} = require('length-prefixed-stream')
 const {pipeline} = require('stream')
 const {resolve: pathResolve} = require('path')
 const defaultBindings = require('gtfs-rt-bindings')
+const {ok} = require('node:assert/strict')
 const {inspect} = require('util')
 
 const read = (readable) => {
@@ -101,9 +102,15 @@ const includeAll = flags['include-all']
 const printWithColors = isatty(process.stdout.fd)
 const depth = flags.depth ? parseInt(flags.depth) : null
 
-const bindings = flags['gtfs-rt-bindings']
-	? require(pathResolve(process.cwd(), flags['gtfs-rt-bindings']))
-	: defaultBindings
+;(async () => {
+
+let bindings = defaultBindings
+if (flags['gtfs-rt-bindings']) {
+	const _bindings = await import(pathResolve(process.cwd(), flags['gtfs-rt-bindings']))
+	// We assume that the bindings are always the default export.
+	bindings = _bindings.default
+	ok(bindings.transit_realtime, `bindings' default export has no property "transit_realtime"`)
+}
 
 const {FeedMessage} = bindings.transit_realtime || bindings
 const onFeedMessage = (buf) => {
@@ -159,3 +166,5 @@ if (isLengthPrefixed) {
 	.catch(showError)
 }
 process.stdout.on('error', showError)
+
+})(showError)
