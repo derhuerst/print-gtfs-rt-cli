@@ -17,6 +17,95 @@ npm install -g print-gtfs-rt-cli
 Or use [`npx`](https://npmjs.com/package/npx). ✨
 
 
+## Getting Started
+
+With the [example feed `example-feed.pbf`](example-feed.pbf), the first `FeedEntity` can be obtained as JSON and pretty-printed using [`jq`](https://jqlang.github.io/jq/) like this:
+
+```shell
+print-gtfs-rt <example-feed.pbf | head -n 1 | jq -r --tab
+```
+
+```json
+{
+    "id": "8.TA.40-11-Y-j18-1.7.H",
+    "trip_update": {
+        "trip": {
+            "trip_id": "8.TA.40-11-Y-j18-1.7.H",
+            "start_time": "12:00:00",
+            "start_date": "20180907",
+            "schedule_relationship": 0,
+            "route_id": "40-11-Y-j18-1"
+        },
+        "stop_time_update": [
+            {
+                "stop_sequence": 1,
+                "departure": {
+                    "delay": 120
+                },
+                "stop_id": "8507492:0:7",
+                "schedule_relationship": 0
+            },
+            {
+                "stop_sequence": 4,
+                "arrival": {
+                    "delay": 0
+                },
+                "departure": {
+                    "delay": 60
+                },
+                "stop_id": "8507100:0:2",
+                "schedule_relationship": 0
+            },
+            {
+                "stop_sequence": 5,
+                "arrival": {
+                    "delay": 0
+                },
+                "departure": {
+                    "delay": 0
+                },
+                "stop_id": "8507000:0:6",
+                "schedule_relationship": 0
+            },
+            {
+                "stop_sequence": 7,
+                "arrival": {
+                    "delay": 60
+                },
+                "departure": {
+                    "delay": 120
+                },
+                "stop_id": "8500218:0:7",
+                "schedule_relationship": 0
+            },
+            {
+                "stop_sequence": 8,
+                "arrival": {
+                    "delay": 60
+                },
+                "departure": {
+                    "delay": 60
+                },
+                "stop_id": "8500023:0:3",
+                "schedule_relationship": 0
+            },
+            {
+                "stop_sequence": 9,
+                "arrival": {
+                    "delay": -60
+                },
+                "departure": {
+                    "delay": 0
+                },
+                "stop_id": "8500010:0:10",
+                "schedule_relationship": 0
+            }
+        ]
+    }
+}
+```
+
+
 ## Usage
 
 ```
