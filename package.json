@@ -1,7 +1,8 @@
 {
 	"name": "print-gtfs-rt-cli",
 	"description": "Read a GTFS Realtime feed from stdin, print human-readable or as JSON.",
-	"version": "3.1.0",
+	"version": "3.2.0",
+	"preferGlobal": true,
 	"files": [
 		"cli.js"
 	],
@@ -31,6 +32,9 @@
 	"dependencies": {
 		"gtfs-rt-bindings": "^4.0.0",
 		"length-prefixed-stream": "^2.0.0"
+	},
+	"peerDependencies": {
+		"protobufjs-cli": "^1.0.1"
 	},
 	"scripts": {
 		"lint": "eslint .",
